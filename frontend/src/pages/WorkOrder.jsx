@@ -20,6 +20,7 @@ export default function WorkOrder() {
   const [modal, setModal] = useState(false);
   const [form, setForm] = useState({});
   const [formError, setFormError] = useState(null);
+  const [pesanJumlah, setPesanJumlah] = useState(''); // BARU: pesan validasi jumlah produksi
   const [models, setModels] = useState([]);
   const [tims, setTims] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -42,6 +43,7 @@ export default function WorkOrder() {
   const openCreate = async () => {
     setForm({ tanggal: hariIni(), jumlah_produksi: '', id_model: '', id_tim: '' });
     setFormError(null);
+    setPesanJumlah(''); // BARU: bersihkan pesan saat form dibuka
     setModal(true);
     try {
       const [m, t] = await Promise.all([api.get('/model-produksi'), api.get('/tim-produksi')]);
@@ -54,6 +56,13 @@ export default function WorkOrder() {
 
   const create = async (e) => {
     e.preventDefault();
+
+    // BARU: domain check, jumlah produksi minimal 1
+    if (Number(form.jumlah_produksi) < 1) {
+      setPesanJumlah('Jumlah produksi minimal 1.');
+      return;
+    }
+
     setSaving(true);
     setFormError(null);
     try {
@@ -85,6 +94,14 @@ export default function WorkOrder() {
   };
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  // BARU: data-type check, karakter non-angka ditolak dan muncul pesan singkat
+  const setJumlah = (e) => {
+    const nilai = e.target.value;
+    const bersih = nilai.replace(/\D/g, ''); // buang semua karakter non-angka
+    setPesanJumlah(nilai !== bersih ? 'Jumlah produksi hanya boleh berisi angka.' : '');
+    setForm((f) => ({ ...f, jumlah_produksi: bersih }));
+  };
 
   return (
     <>
@@ -140,7 +157,16 @@ export default function WorkOrder() {
               </div>
               <div className="field">
                 <label>Jumlah produksi <span className="req">*</span></label>
-                <input type="number" min="1" value={form.jumlah_produksi} onChange={set('jumlah_produksi')} required />
+                {/* DIUBAH: type="text" + inputMode numeric, handler setJumlah, tanpa min="1" */}
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={form.jumlah_produksi}
+                  onChange={setJumlah}
+                  required
+                />
+                {/* BARU: pesan validasi di bawah kolom */}
+                {pesanJumlah && <small style={{ color: '#c0392b' }}>{pesanJumlah}</small>}
               </div>
               <div className="field full">
                 <label>Model produksi <span className="req">*</span></label>
