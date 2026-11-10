@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { NAV } from '../nav';
-import { LogOut, Menu as MenuIcon, UserRound } from 'lucide-react';
+import { LogOut, Menu as MenuIcon, UserRound, CalendarDays } from 'lucide-react';
 
 const isMobile = () => window.innerWidth <= 860;
 
@@ -10,6 +10,14 @@ export default function Layout() {
   const { user, logout } = useAuth();
   // true = hanya ikon, false = menu penuh. Di HP default-nya hanya ikon.
   const [collapsed, setCollapsed] = useState(() => isMobile());
+
+  // Tanggal hari ini (untuk tanggal produksi)
+  const today = new Date().toLocaleDateString('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 
   const groups = NAV
     .map((g) => ({
@@ -23,11 +31,12 @@ export default function Layout() {
       <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
         {/* BRAND */}
         <div className="brand">
-          <span className="logo">R</span>
-          <div>
-            <strong>Rosalina</strong>
-            <small>Collection</small>
-          </div>
+          <img className="logo-img" src="/logo-sidebar.png" alt="" />
+          <img
+            className="brand-wordmark"
+            src="/wordmark-light.png"
+            alt="Rosalina Collection"
+          />
         </div>
 
         {/* NAVIGASI */}
@@ -87,6 +96,12 @@ export default function Layout() {
             <MenuIcon size={20} />
           </button>
 
+          {/* TANGGAL HARI INI */}
+          <div className="topbar-date">
+            <CalendarDays size={16} />
+            <span>{today}</span>
+          </div>
+
           <div className="spacer" />
 
           {/* INFO PENGGUNA (kanan atas) */}
@@ -95,12 +110,6 @@ export default function Layout() {
             <strong>{user.nama}</strong>
             <span className="badge muted">{user.role}</span>
           </div>
-
-          {/* KELUAR (kanan atas) */}
-          <button className="btn ghost sm" onClick={logout}>
-            <LogOut size={17} />
-            Keluar
-          </button>
         </header>
 
         <main className="content">

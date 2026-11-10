@@ -33,9 +33,8 @@ export default function Login() {
   return (
     <div className="login-page" style={{ '--login-bg': "url('/Gudang_Pakaian.jpg')" }}>
       <form className="login-card" onSubmit={onSubmit}>
-        <div className="brand dark">
-          <span className="logo">R</span>
-          <div><strong>Rosalina Collection</strong><small>Sistem Manajemen Produksi Pakaian</small></div>
+        <div className="login-brand">
+          <img src="/logo-rosalina.png" alt="Rosalina Collection" />
         </div>
         <h2>Masuk</h2>
         <FormErrors error={error} />
