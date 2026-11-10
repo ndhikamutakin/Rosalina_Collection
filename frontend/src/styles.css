@@ -115,3 +115,25 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--primary-sof
 .login-page { min-height: 100vh; display: grid; place-items: center; padding: 16px; background: linear-gradient(135deg, var(--primary-soft), var(--bg)); }
 .login-card { background: #fff; padding: 28px; border-radius: 14px; width: 100%; max-width: 380px; box-shadow: 0 12px 40px rgba(125,21,64,.15); }
 .login-card h2 { margin: 0 0 14px; }
+
+
+/* Sidebar Owner dengan ikon */
+.owner-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Ukuran ikon sidebar */
+.owner-nav-link .nav-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* Posisi teks menu */
+.owner-nav-link span {
+    display: inline-block;
+    line-height: 1.3;
+}
+

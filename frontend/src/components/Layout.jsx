@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -8,7 +9,10 @@ export default function Layout() {
   const [open, setOpen] = useState(false);
 
   const groups = NAV
-    .map((g) => ({ ...g, items: g.items.filter((i) => i.roles.includes(user.role)) }))
+    .map((g) => ({
+      ...g,
+      items: g.items.filter((i) => i.roles.includes(user.role)),
+    }))
     .filter((g) => g.items.length);
 
   return (
@@ -16,39 +20,83 @@ export default function Layout() {
       <aside className={`sidebar ${open ? 'open' : ''}`}>
         <div className="brand">
           <span className="logo">R</span>
-          <div><strong>Rosalina</strong><small>Collection</small></div>
+          <div>
+            <strong>Rosalina</strong>
+            <small>Collection</small>
+          </div>
         </div>
+
         <nav>
           {groups.map((g) => (
             <div key={g.section}>
               <div className="nav-section">{g.section}</div>
-              {g.items.map((i) => (
-                <NavLink
-                  key={i.to}
-                  to={i.to}
-                  onClick={() => setOpen(false)}
-                  className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                >
-                  {i.label}
-                </NavLink>
-              ))}
+
+              {g.items.map((i) => {
+                const Icon = i.icon;
+
+                return (
+                  <NavLink
+                    key={i.to}
+                    to={i.to}
+                    onClick={() => setOpen(false)}
+                    className={({ isActive }) =>
+                      `nav-link ${
+                        user.role === 'owner' ? 'owner-nav-link' : ''
+                      } ${isActive ? 'active' : ''}`
+                    }
+                  >
+                    {user.role === 'owner' && Icon && (
+                      <Icon
+                        className="nav-icon"
+                        size={18}
+                        strokeWidth={2}
+                        aria-hidden="true"
+                      />
+                    )}
+
+                    <span>{i.label}</span>
+                  </NavLink>
+                );
+              })}
             </div>
           ))}
         </nav>
       </aside>
-      {open && <div className="scrim" onClick={() => setOpen(false)} />}
+
+      {open && (
+        <div
+          className="scrim"
+          onClick={() => setOpen(false)}
+        />
+      )}
 
       <div className="main">
         <header className="topbar">
-          <button className="btn ghost sm menu-btn" onClick={() => setOpen(true)}>Menu</button>
+          <button
+            className="btn ghost sm menu-btn"
+            onClick={() => setOpen(true)}
+          >
+            Menu
+          </button>
+
           <div className="spacer" />
+
           <div className="who">
             <strong>{user.nama}</strong>
             <span className="badge muted">{user.role}</span>
           </div>
-          <button className="btn ghost sm" onClick={logout}>Keluar</button>
+
+          <button
+            className="btn ghost sm"
+            onClick={logout}
+          >
+            Keluar
+          </button>
         </header>
-        <main className="content"><Outlet /></main>
+
+        <main className="content">
+          <Outlet />
+        </main>
       </div>
     </div>
   );
