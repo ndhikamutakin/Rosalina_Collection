@@ -3,6 +3,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FormErrors } from '../components/ui';
 
+
 // Sequence Login: input username & password -> validasi -> berhasil / gagal
 export default function Login() {
   const { user, login } = useAuth();
@@ -30,7 +31,7 @@ export default function Login() {
   };
 
   return (
-    <div className="login-page">
+    <div className="login-page" style={{ '--login-bg': "url('/Gudang_Pakaian.jpg')" }}>
       <form className="login-card" onSubmit={onSubmit}>
         <div className="brand dark">
           <span className="logo">R</span>
