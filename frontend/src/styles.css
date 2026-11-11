@@ -377,22 +377,11 @@ td .badge.ok     { background: #e6f6ee; color: #17703f; border-color: #bfe6d0; }
 td .badge.danger { background: #fdeaeb; color: #b3202a; border-color: #f6c7ca; }
 
 /* "proses": titik berdenyut = sedang berjalan */
-td .badge.warn::before { width: 7px; height: 7px; animation: pulse-dot 1.5s ease-out infinite; }
 @keyframes pulse-dot {
   0%   { box-shadow: 0 0 0 0 rgba(154, 86, 0, .5); }
   70%  { box-shadow: 0 0 0 7px rgba(154, 86, 0, 0); }
   100% { box-shadow: 0 0 0 0 rgba(154, 86, 0, 0); }
 }
-
-/* "selesai": titik diganti tanda centang */
-td .badge.ok::before {
-  content: "✓";
-  width: auto; height: auto;
-  background: none;
-  font-size: 11px;
-  font-weight: 800;
-}
-
 /* Tombol "Tandai selesai" */
 td .btn.ok {
   display: inline-flex;
@@ -558,3 +547,16 @@ td:last-child { text-align: right; white-space: nowrap; }
 }
 .login-brand img { height: 76px; max-width: 100%; width: auto; display: inline-block; }
 .login-card h2 { text-align: center; margin-bottom: 18px; }
+
+/* Semua badge status: titik bulat saja */
+td .badge::before,
+td .badge.ok::before,
+td .badge.warn::before,
+td .badge.danger::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  font-size: 0;
+}
